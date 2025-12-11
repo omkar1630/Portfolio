@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omkar's Advanced Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    
+    <style>
+        /* =================== BASE & UTILITY STYLES =================== */
+        :root {
+            --bg-dark: rgb(12, 12, 21);
+            --primary-purple: #9333ea;
+            --secondary-dark: #1a1a2e;
+            --card-dark: #1c1c2e;
+            --text-light: #f0f0f0;
+            --text-gray: #ccc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            scroll-margin-top: 80px;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+
+        .purple, #element {
+            color: var(--primary-purple);
+        }
+
+        /* =================== CUSTOM CURSOR =================== */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-purple);
+            border-radius: 50%;
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-outline {
+            width: 35px;
+            height: 35px;
+            border: 2px solid var(--primary-purple);
+            border-radius: 50%;
+            position: fixed;
+            z-index: 9998;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
+        }
+        
+        /* Cursor interaction effect */
+        a:hover ~ .cursor-outline,
+        button:hover ~ .cursor-outline,
+        .project-card:hover ~ .cursor-outline,
+        .cert-card:hover ~ .cursor-outline {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(147, 51, 234, 0.2);
+        }
+
+
+        /* =================== NAVIGATION BAR =================== */
+        nav {
+            display: flex;
+            font-size: 1.5rem;
+            justify-content: space-around;
+            align-items: center;
+            height: 80px;
+            width: 100%;
+            background-color: rgba(26, 26, 46, 0.8); /* Semi-transparent background */
+            position: fixed;
+            z-index: 1000;
+            backdrop-filter: blur(8px); /* Glassmorphism effect */
+            border-bottom: 1px solid rgba(147, 51, 234, 0.3);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            list-style: none;
+            margin: 0 23px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-light);
+            transition: color 0.3s, font-size 0.3s;
+        }
+
+        nav ul li a:hover {
+            font-size: 1.10rem;
+            color: var(--primary-purple);
+        }
+
+        /* =================== HOME SECTION (HERO) =================== */
+        .first {
+            display: flex;
+            justify-content: space-around;
+            padding: 120px 5% 80px 5%; /* Increased padding */
+            align-items: center;
+            max-width: 90vw;
+            margin: auto;
+            position: relative;
+            overflow: hidden; /* Contains particle background */
+        }
+        
+        .leftsection {
+            font-size: 2.5rem;
+            flex-basis: 55%;
+            z-index: 10;
+        }
+        .leftsection div {
+            margin: 10px 0;
+        }
+
+        .rightsection {
+            flex-basis: 35%;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .rightsection img {
+            width: 80%;
+            border-radius: 50%; /* Make image circular */
+            border: 4px solid var(--primary-purple);
+            box-shadow: 0 0 30px rgba(147, 51, 234, 0.6);
+        }
+        
+        /* Download CV Button */
+        .download-cv {
+            margin-top: 40px;
+            text-align: left; 
+        }
+
+        .download-cv button {
+            padding: 14px 30px;
+            background: var(--primary-purple); 
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: none; /* Controlled by custom cursor */
+            transition: 0.3s ease-in-out;
+        }
+
+        .download-cv button:hover {
+            background: #7e22ce;
+            box-shadow: 0 0 20px var(--primary-purple);
+            transform: scale(1.05);
+        }
+        
+        /* Particle Container (for mouse tracking background) */
+        #particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: var(--primary-purple);
+            border-radius: 50%;
+            opacity: 0.5;
+            transition: transform 0.1s linear; /* Quick transformation */
+            will-change: transform;
+        }
+
+
+        /* =================== GENERAL SECTIONS & DIVIDERS =================== */
+        section {
+            padding: 60px 10%;
+            color: var(--text-light);
+            min-height: 400px;
+        }
+
+        h2, #ab h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary-purple);
+            font-size: 2.5rem;
+        }
+        
+        main hr {
+            border: 0;
+            background-color: rgba(97, 138, 199, 0.4);
+            height: 1px;
+            margin: 50px 10%;
+        }
+
+        /* =================== CARD STYLES (Projects, Internships, Certs) =================== */
+        .project-container, .internship-container, .cert-container {
+             gap: 30px;
+             scroll-margin-top: 80px;
+        }
+        .project-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        .cert-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .project-card, .internship-card, .cert-card {
+            background: var(--card-dark); 
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(147, 51, 234, 0.2);
+            text-align: center;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            cursor: none; /* Controlled by custom cursor */
+        }
+        
+        /* Card Hover Glow Effect */
+        .project-card::before, .cert-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(147, 51, 234, 0.4) 0%, transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+
+        .project-card:hover::before, .cert-card:hover::before {
+            opacity: 1;
+        }
+        
+        .project-card:hover, .cert-card:hover {
+            transform: scale(1.02); 
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(147, 51, 234, 0.6); 
+        }
+
+        .project-card p {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+            text-align: left;
+            margin-top: 15px;
+        }
+
+        .project-card a, .cert-card a {
+            color: var(--primary-purple); 
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+        
+        .internship-card {
+             background: var(--card-dark);
+             border-left: 5px solid var(--primary-purple);
+             padding: 25px;
+             border-radius: 12px;
+             text-align: left;
+             margin-bottom: 20px;
+             transition: all 0.3s ease;
+        }
+        .internship-card:hover {
+             background: #252538;
+             transform: translateX(5px);
+        }
+        .internship-card h3 {
+             color: var(--primary-purple);
+             text-align: left;
+             margin-bottom: 5px;
+        }
+        .internship-card span {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            display: block;
+            margin-bottom: 15px;
+        }
+        .internship-card ul {
+             list-style-type: '— ';
+             margin-left: 20px;
+             font-size: 0.95rem;
+        }
+
+
+        /* =================== CONTACT SECTION =================== */
+        .contact-container {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+        }
+        .intro {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+            align-items: center;
+        }
+        .contact-icons {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: flex-start;
+            padding: 20px 0;
+            text-align: left;
+        }
+        .contact-icons a {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .contact-icons a i {
+            font-size: 1.8rem;
+            color: var(--primary-purple);
+            margin-right: 15px;
+        }
+        .contact-icons a:hover {
+            color: var(--primary-purple);
+            transform: translateX(5px);
+        }
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .contact-form input,
+        .contact-form textarea {
+            padding: 12px;
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            background-color: var(--bg-dark); 
+            color: white;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100%;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 5px rgba(147, 51, 234, 0.5);
+        }
+
+        /* =================== SCROLL ANIMATION CSS =================== */
+        .hidden {
+          opacity: 0;
+          filter: blur(5px);
+          transform: translateY(50px);
+          transition: all 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .show {
+          opacity: 1;
+          filter: blur(0);
+          transform: translateY(0);
+        }
+
+        .hidden:nth-child(2) { transition-delay: 0.1s; }
+        .hidden:nth-child(3) { transition-delay: 0.2s; }
+
+
+        /* =================== RESPONSIVENESS =================== */
+        @media (max-width: 900px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .contact-icons {
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* General */
+            h2, #ab h1 { font-size: 2rem; margin-bottom: 30px; }
+            section { padding: 40px 5%; }
+
+            /* Navbar */
+            nav {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 0;
+            }
+            nav .left { margin-bottom: 10px; }
+            nav ul {
+                padding: 0;
+                flex-wrap: wrap;
+            }
+            nav ul li { margin: 5px 8px; }
+
+            /* Hero */
+            .first {
+                flex-direction: column-reverse; 
+                text-align: center;
+                padding-top: 130px; 
+            }
+            .leftsection { font-size: 1.8rem; }
+            .rightsection img { width: 50%; margin-top: 20px; }
+            .download-cv { text-align: center; }
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <header>
+        <nav>
+            <div class="left">Omkar Portfolio</div>
+            <div class="right">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About Me</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact Me</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="first" id="home">
+            <div id="particle-container"></div> 
+            
+            <div class="leftsection">
+                Hi, My name is <span class="purple">Omkar</span>
+                <div>and i am a Passionate </div>
+                
+                <span id="element"></span>
+                <div class="download-cv hidden">
+                    <a href="Omkar_Resume.pdf" download> 
+                        <button>📄 Download CV</button>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="rightsection">
+                <img src="dev.png" alt="Developer illustration">
+            </div>
+                
+        </section>
+        <hr>
+
+        <section id="about">
+          <div id="ab" class="hidden">
+            <center><h1 style="color: var(--primary-purple);" >About Me</h1></center><br>
+
+            <p> Hi, I’m Omkar, a passionate Full Stack Developer who loves building modern, scalable, and user-friendly applications. I enjoy turning complex problems into simple, beautiful, and intuitive digital solutions.
+
+I started my coding journey with C and Java, and gradually explored the world of web development. Over time, I worked with Python and Java for backend development, and I enjoy designing efficient systems and writing clean, maintainable code.</p>
+          
+            <br>
+            <h3 class="purple" style="margin-bottom: 10px;">Technical Skills </h3>
+            <ul> 
+              <li>Frontend Development : HTML, CSS, JavaScript, React.js</li>
+              <li>Backend Development : Python (Flask/Django), Java (Spring)</li>
+               <li>Database Management : MongoDB, MySQL</li>
+                <li>Other Tools : Git, GitHub, VS Code</li>
+            </ul>
+          </div>
+        </section>
+        <hr>
+        
+        <section id="projects">
+          <h2>Projects</h2>
+          <div class="project-container">
+            <div class="project-card hidden">
+              <h3>American Sign langauge Recognition System</h3>
+              <p>My project is called SignPro, a real-time American Sign Language (ASL) self-learning system. It helps deaf and hard-of-hearing people, or anyone interested, to learn ASL alphabets (A–Z) using their webcam. The system uses MediaPipe for hand landmark detection and OpenCV for video processing. Instead of machine learning, it works on rule-based logic to recognize hand gestures quickly and offline.</p>
+              <a href="#" target="_blank">GitHub</a>
+            </div>
+            <div class="project-card hidden">
+                <h3>E-commerce Backend Service</h3>
+                <p>Designed and deployed a scalable RESTful API for an e-commerce platform using Django and PostgreSQL. Implemented secure user authentication (JWT) and integrated third-party payment gateways. Focused on optimizing database queries for high traffic.</p>
+                <a href="#" target="_blank">GitHub</a>
+            </div>
+            
+          </div>
+        </section>
+        <hr>
+
+        <section id="internships">
+          <h2>Internship Experience</h2>
+          <div class="internship-container">
+            <div class="internship-card hidden">
+              <h3>Software Developer Intern at Humming Byte Technologies Pvt.Ltd</h3>
+              <span>Jan 2025 - June 2025</span>
+              <ul>
+                <li>Worked on full stack development projects focusing on Python/Django and React.js.</li>
+                <li>Gained hands-on experience in Java (Spring Boot) and web technologies.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <hr>
+
+        <section id="certificates">
+          <h2>Certificates</h2>
+          <div class="cert-container">
+            <div class="cert-card hidden">
+              <h3>Web Development Certificate</h3>
+              <p>Issued by Coding Seekho - 2025</p>
+              <a href="/html,css-certificates.jpg" target="_blank">View Certificate</a>
+            </div>
+            <div class="cert-card hidden">
+              <h3>Full Stack Developer Certificate</h3>
+              <p>Issued by Coding Seekho - 2025</p>
+               <a href="/fullstack-certificates.jpg" target="_blank">View Certificate</a>
+            </div>
+          </div>
+        </section>
+        <hr>
+
+        <section id="contact">
+          <div class="contact-container">
+            <h2>Contact Me</h2>
+            <p class="intro hidden">
+              I’d love to hear from you! Whether you have a question, want to discuss a project, 
+              or just want to connect, feel free to drop a message.
+            </p>
+
+            <div class="contact-grid">
+              
+              <div class="contact-icons">
+                  <a href="mailto:rautomkar1630@gmail.com" target="_blank" class="hidden"><i class="fas fa-envelope"></i> rautomkar1630@gmail.com</a>
+                  <a href="tel:+919702990345" class="hidden"><i class="fas fa-phone"></i> +91 9702990345</a>
+                  <a href="https://www.linkedin.com/in/omkar-raut-828531314?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" class="hidden"><i class="fab fa-linkedin"></i> LinkedIn Profile</a>
+                  <a href="https://github.com/omkar1630" target="_blank" class="hidden"><i class="fab fa-github"></i> GitHub Profile</a>
+              </div>
+
+              <form class="contact-form hidden">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Message" rows="5" required></textarea>
+                <button type="submit">Send Message</button>
+              </form>
+            </div>
+          </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2025 Omkar | All Rights Reserved</p>
+    </footer>
+
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+
+    <script>
+        /* =================== 1. Typed.js Animation =================== */
+        var typed = new Typed('#element', {
+            strings: ['Web Developer', 'Full Stack Developer', 'Software Enthusiast'],
+            typeSpeed: 60,
+            loop: true,
+            backSpeed: 40,
+            backDelay: 1500,
+        });
+
+        /* =================== 2. Scroll Reveal Animation (Intersection Observer) =================== */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                    observer.unobserve(entry.target); 
+                }
+            });
+        }, {
+            threshold: 0.1 // Triggers when 10% of the item is visible
+        });
+
+        const hiddenElements = document.querySelectorAll('.hidden');
+        hiddenElements.forEach((el) => observer.observe(el));
+
+
+        /* =================== 3. Custom Cursor Logic =================== */
+        const cursorDot = document.querySelector(".cursor-dot");
+        const cursorOutline = document.querySelector(".cursor-outline");
+
+        window.addEventListener("mousemove", function (e) {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            // Dot follows instantly
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Outline follows with a slight delay for smooth effect
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+        
+        /* =================== 4. Mouse Tracking Particle Background =================== */
+        const particleContainer = document.getElementById('particle-container');
+        const numParticles = 20;
+        let particles = [];
+
+        // Create particles
+        for (let i = 0; i < numParticles; i++) {
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            p.style.left = `${Math.random() * 100}%`;
+            p.style.top = `${Math.random() * 100}%`;
+            p.style.opacity = Math.random() * 0.8 + 0.2;
+            p.style.transform = `scale(${Math.random() * 1 + 0.5})`;
+            particleContainer.appendChild(p);
+            particles.push({
+                element: p,
+                x: parseFloat(p.style.left),
+                y: parseFloat(p.style.top),
+                speedX: (Math.random() - 0.5) * 0.1,
+                speedY: (Math.random() - 0.5) * 0.1,
+            });
+        }
+
+        // Mouse tracking and particle movement
+        window.addEventListener('mousemove', (e) => {
+            const containerRect = particleContainer.getBoundingClientRect();
+            const mouseX = e.clientX - containerRect.left;
+            const mouseY = e.clientY - containerRect.top;
+
+            // Set CSS variables for card hover glow effect
+            document.documentElement.style.setProperty('--mouse-x', `${(mouseX / containerRect.width) * 100}%`);
+            document.documentElement.style.setProperty('--mouse-y', `${(mouseY / containerRect.height) * 100}%`);
+
+
+            particles.forEach(p => {
+                // Calculate distance to mouse
+                const dx = mouseX - (p.x * containerRect.width / 100);
+                const dy = mouseY - (p.y * containerRect.height / 100);
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                // Push particles away from the mouse
+                if (distance < 150) {
+                    const forceDirectionX = dx / distance;
+                    const forceDirectionY = dy / distance;
+                    const force = 1 - (distance / 150); 
+
+                    p.element.style.transform = `translate(${-forceDirectionX * force * 20}px, ${-forceDirectionY * force * 20}px) scale(${p.element.style.transform.match(/scale\((.*?)\)/)?.[1] || 1})`;
+                } else {
+                    // Reset or apply slow movement when far from mouse
+                    p.element.style.transform = `translate(0px, 0px) scale(${p.element.style.transform.match(/scale\((.*?)\)/)?.[1] || 1})`;
+                }
+            });
+        });
+        
+    </script>
+
+</body>
+
+</html>
